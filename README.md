@@ -1,6 +1,10 @@
 # molent
 Computing molecular information entropies and similarities.
 
+For more information see the preprint:
+> A. Croy: *From Local Atomic Environments to Molecular Information Entropy*,
+> [arXiv:2401.09282](https://arxiv.org/abs/2401.09282)
+
 ## requirements
 - numpy and scipy
 - some functions use [rdkit](https://www.rdkit.org/)
