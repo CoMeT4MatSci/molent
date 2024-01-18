@@ -45,6 +45,9 @@ def plot_similarities(S, symbols=None, digits=1, fig=None, ax=None):
         Returns:
             fig, ax
     """
+    import numpy as np
+    import matplotlib.pyplot as plt
+
     if not fig:
         fig = plt.figure(figsize=(4,4))
     if not ax:
