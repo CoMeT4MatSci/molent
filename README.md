@@ -10,6 +10,10 @@ For more information see the preprint:
 - some functions use [rdkit](https://www.rdkit.org/)
 - the SOAP descriptors are calculated using [DScribe](https://github.com/SINGROUP/dscribe)
 
+## installation
+- Clone / download latest version from github.
+- Run `pip install -e .` in the terminal to install package but keep it editable in the current directory.
+
 ## example(s)
 A simple example looks like this:
 ```python
