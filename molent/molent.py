@@ -37,6 +37,44 @@ def atomic_smiles(m, max_radius = 1):
     return smiles
 
 
+def atomic_mols(m, max_radius = 1):
+    """ Determine fragments of molecule m by starting from each atom and taking atoms 
+        which are at most max_radius bonds away.
+    
+        Args:
+            m(rdchem.Mol): rdkit Molecule.
+            max_radius(int): Number of bonds to include in fragment.
+            
+        Returns:
+            list: List of rdkit molecules for each atomic environment in molecule.
+            list: List of atom ids in the fragments corresponding to the centers of the environments.
+    """
+    from rdkit import Chem
+    
+    mols = []
+    roots = []
+    for at in range(m.GetNumAtoms()):
+        if max_radius == 0:
+            sm = m.GetAtomWithIdx(at).GetSymbol()
+        else:
+            for rad in range(max_radius,0,-1):
+                env = Chem.FindAtomEnvironmentOfRadiusN(m, rad, at, useHs=True)
+                amap={}
+                submol = Chem.PathToSubmol(m, env, atomMap=amap)
+
+                if len(amap)>0:
+                    break
+
+            if submol.GetNumAtoms() == 0:
+                submol = m
+                amap = {0: 0}
+
+        mols.append(submol)
+        roots.append(amap[at])
+
+    return mols, roots
+
+
 def fragment_smiles(mol_smiles, N_rad=1, useHs=False):
     """ Determine fragments of each molecule given in the list of SMILES strings.
     

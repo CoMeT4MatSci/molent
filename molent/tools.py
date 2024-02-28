@@ -32,6 +32,36 @@ def cleanup_qm9_xyz(fname):
     return ind, gdb_smi, relax_smi
 
 
+def atoms2mol(atoms, charge=0):
+    """ Converts ASE Atoms representation to rdkit molecule.
+        Taken from  
+        https://greglandrum.github.io/rdkit-blog/posts/2022-12-18-introducing-rdDetermineBonds.html
+
+        Args:
+            atoms(ase.Atoms): Input molecule.
+            charge(int): Total charge of the molecule.
+        
+        Returns:
+            rdchem.Mol: rdkit molecule or None if an error occurs.
+    """
+    import io
+    from ase.io import write
+    from rdkit import Chem
+    from rdkit.Chem import rdDetermineBonds
+    
+    ## xyz_to_mol
+    xyz_string = io.StringIO()
+    write(xyz_string, atoms, format='xyz')
+    raw_mol = Chem.MolFromXYZBlock(xyz_string.getvalue())
+    xyz_mol = Chem.Mol(raw_mol)
+    try:
+        rdDetermineBonds.DetermineBonds(xyz_mol, charge=charge)
+    except ValueError:
+        xyz_mol = None
+        
+    return xyz_mol
+
+
 def plot_similarities(S, symbols=None, digits=1, fig=None, ax=None):
     """ Plots similarity matrix as a heatmap.
     
